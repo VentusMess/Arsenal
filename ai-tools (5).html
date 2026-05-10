@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Арсенал — AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --bg2:#161616;
+  --bg3:#1e1e1e;
+  --card:#1a1a1a;
+  --card2:#222222;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --text:#f0ede8;
+  --text2:#9a9691;
+  --text3:#5a5753;
+  --accent:#e8e3dc;
+  --gold:#c9a96e;
+  --gold2:#8a6a3a;
+  --r:18px;--r-sm:12px;--rp:100px;
+  --sh:0 4px 24px rgba(0,0,0,.4);
+  --sh-lg:0 12px 48px rgba(0,0,0,.6);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ─── HEADER ─── */
+.hd{
+  padding:22px 20px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+  background:rgba(15,15,15,.92);
+  backdrop-filter:blur(20px);
+}
+.logo{font-size:18px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.logo b{color:var(--gold)}
+.hd-badge{background:var(--gold);color:#1a1000;font-size:9px;font-weight:700;letter-spacing:.12em;padding:3px 9px;border-radius:var(--rp);text-transform:uppercase}
+
+/* ─── LAYOUT ─── */
+main{max-width:900px;margin:0 auto;padding:28px 16px 60px;display:flex;flex-direction:column;gap:16px}
+
+/* ─── SECTION CARD ─── */
+.sec{
+  background:var(--card);
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.sec-head{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.sec-num{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--gold);color:#1a1000;
+  font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.sec-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.sec-sub{font-size:12px;color:var(--text2);margin-top:1px}
+.sec-body{padding:20px}
+
+/* ─── PILLS ─── */
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pill{
+  border:1px solid var(--border2);background:none;
+  color:var(--text2);font-family:'Onest',sans-serif;
+  font-size:12px;font-weight:600;padding:7px 14px;
+  border-radius:var(--rp);cursor:pointer;transition:all .18s;
+}
+.pill:hover{border-color:var(--gold);color:var(--gold)}
+.pill.active{background:var(--gold);color:#1a1000;border-color:var(--gold)}
+
+/* ─── INPUTS ─── */
+textarea,input[type=tel],input[type=number],input[type=text]{
+  width:100%;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:var(--r-sm);
+  padding:13px 15px;font-family:'Onest',sans-serif;
+  font-size:14px;color:var(--text);
+  outline:none;resize:none;transition:border-color .2s,box-shadow .2s;
+  line-height:1.6;-webkit-appearance:none;
+}
+textarea::placeholder,input::placeholder{color:var(--text3)}
+textarea:focus,input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,.1)}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+select{
+  width:100%;appearance:none;
+  background:var(--bg3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235a5753' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 13px center;
+  border:1px solid var(--border2);border-radius:var(--r-sm);
+  padding:13px 38px 13px 15px;font-family:'Onest',sans-serif;
+  font-size:14px;color:var(--text);cursor:pointer;outline:none;transition:border-color .2s;
+}
+select:focus{border-color:var(--gold)}
+select option{background:#1a1a1a;color:var(--text)}
+
+.char-row{display:flex;justify-content:flex-end;margin-top:4px}
+.cc{font-size:11px;color:var(--text3)}
+
+/* ─── RUN BTN ─── */
+.run{
+  width:100%;background:var(--gold);color:#1a1000;
+  border:none;border-radius:var(--r-sm);padding:14px;
+  font-family:'Onest',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;margin-top:12px;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;
+  box-shadow:0 4px 20px rgba(201,169,110,.25);letter-spacing:-.1px;
+}
+.run:hover{background:#d4b47a;box-shadow:0 6px 28px rgba(201,169,110,.35);transform:translateY(-1px)}
+.run:active{transform:scale(.98)}
+.run:disabled{opacity:.4;transform:none;cursor:not-allowed;box-shadow:none}
+
+/* ─── MODE SELECT ─── */
+.sub-select{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;
+}
+.sub-btn{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--r-sm);padding:10px 8px;
+  font-family:'Onest',sans-serif;font-size:12px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .18s;text-align:center;
+}
+.sub-btn:hover{border-color:var(--gold);color:var(--gold)}
+.sub-btn.active{background:rgba(201,169,110,.15);border-color:var(--gold);color:var(--gold)}
+
+/* ─── LOADER ─── */
+.loader{display:none;align-items:center;gap:10px;padding:12px 0;font-size:13px;color:var(--text2)}
+.loader.on{display:flex}
+.spin{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ─── OUTPUT ─── */
+.out{
+  display:none;margin-top:12px;
+  background:var(--bg3);border:1px solid var(--gold2);
+  border-radius:var(--r-sm);overflow:hidden;animation:fu .25s ease;
+}
+.out.on{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.out-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  background:rgba(201,169,110,.06);
+}
+.out-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.cpy{
+  background:rgba(201,169,110,.15);border:none;border-radius:var(--rp);
+  padding:4px 12px;font-family:'Onest',sans-serif;font-size:11px;font-weight:600;
+  color:var(--gold);cursor:pointer;transition:all .18s;
+}
+.cpy:hover{background:rgba(201,169,110,.25)}
+.out-txt{padding:14px 16px;font-size:14px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word}
+
+/* ─── PHONE TILES ─── */
+.phone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;border-bottom:1px solid var(--border)}
+.tile{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px}
+.tile.wide{grid-column:1/-1}
+.tile-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.tile-val{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
+.tile-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.rbadge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(--rp);font-size:11px;font-weight:600}
+.r-low{background:rgba(26,122,74,.2);color:#4ade80}
+.r-mid{background:rgba(146,96,10,.2);color:#fbbf24}
+.r-hi{background:rgba(154,28,28,.2);color:#f87171}
+.phone-extra{padding:12px 14px;font-size:13px;line-height:1.65;color:var(--text2)}
+
+/* ─── CONVERTER ─── */
+.cat-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.cat-btn{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rp);
+  padding:5px 12px;font-family:'Onest',sans-serif;font-size:11px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.cat-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cat-btn.active{background:var(--gold);color:#1a1000;border-color:var(--gold)}
+
+.conv-grid{display:grid;grid-template-columns:1fr 36px 1fr;gap:8px;align-items:end;margin:12px 0}
+.conv-f label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:6px}
+.swap-btn{
+  width:36px;height:40px;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:14px;color:var(--text2);transition:all .2s;align-self:end;
+}
+.swap-btn:hover{border-color:var(--gold);color:var(--gold);transform:rotate(180deg)}
+
+.res-box{
+  background:linear-gradient(135deg,rgba(201,169,110,.12) 0%,rgba(201,169,110,.04) 100%);
+  border:1px solid var(--gold2);border-radius:var(--r-sm);
+  padding:18px;text-align:center;margin-top:4px;
+}
+.res-big{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--gold)}
+.res-lbl{font-size:13px;color:var(--text2);margin-top:4px}
+.res-rate{font-size:11px;color:var(--text3);margin-top:3px}
+.rate-note{font-size:11px;color:var(--text3);text-align:center;margin-top:8px}
+
+/* ─── AUDIO ─── */
+.drop{
+  border:1.5px dashed var(--border2);border-radius:var(--r-sm);
+  padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;
+  background:var(--bg3);user-select:none;
+}
+.drop:hover,.drop.drag{border-color:var(--gold);background:rgba(201,169,110,.04)}
+.drop-icon{font-size:28px;display:block;margin-bottom:8px}
+.drop-ttl{font-size:14px;font-weight:600;color:var(--text)}
+.drop-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.fmts{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.fmt{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.05em}
+
+.fprev{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);
+  padding:12px 14px;margin-top:10px;display:none;align-items:center;gap:10px;
+}
+.fprev.on{display:flex}
+.finfo{flex:1;min-width:0}
+.fname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsize{font-size:11px;color:var(--text3)}
+.frm{background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);transition:color .15s;line-height:1}
+.frm:hover{color:var(--text)}
+
+.lang-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.lang-btn{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rp);
+  padding:6px 12px;font-family:'Onest',sans-serif;font-size:12px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .18s;
+}
+.lang-btn:hover{border-color:var(--gold);color:var(--gold)}
+.lang-btn.active{background:rgba(201,169,110,.15);border-color:var(--gold);color:var(--gold)}
+
+/* ─── LEN GRID ─── */
+.len-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.len-btn{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);
+  padding:10px 6px;font-family:'Onest',sans-serif;font-size:12px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .18s;text-align:center;
+}
+.len-btn span{display:block;font-size:16px;margin-bottom:3px}
+.len-btn:hover{border-color:var(--gold);color:var(--gold)}
+.len-btn.active{background:rgba(201,169,110,.15);border-color:var(--gold);color:var(--gold)}
+
+/* ─── HINTS ─── */
+.hints{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.hint{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--rp);
+  padding:5px 11px;font-family:'Onest',sans-serif;font-size:11px;font-weight:500;
+  color:var(--text2);cursor:pointer;transition:all .15s;
+}
+.hint:hover{border-color:var(--gold);color:var(--gold)}
+
+.div{height:1px;background:var(--border);margin:14px 0}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--card2);color:var(--text);
+  border:1px solid var(--border2);
+  padding:12px 20px;border-radius:var(--rp);
+  font-size:13px;font-weight:500;z-index:999;
+  transition:transform .3s cubic-bezier(.34,1.3,.64,1);
+  white-space:nowrap;box-shadow:var(--sh-lg);max-width:90vw;text-align:center;
+}
+.toast.on{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:600px){
+  .phone-grid{grid-template-columns:1fr}
+  .tile.wide{grid-column:1}
+  .conv-grid{grid-template-columns:1fr 1fr}
+  .swap-btn{display:none}
+  .sub-select{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="logo">Арсенал<b>.</b></div>
+  <div class="hd-badge">AI · Groq</div>
+</div>
+
+<main>
+
+<!-- ══ 1. ТЕКСТ ══ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-num">1</div>
+    <div>
+      <div class="sec-title">Работа с текстом</div>
+      <div class="sec-sub">Создай, исправь или перепиши любой текст</div>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div class="sub-select">
+      <button class="sub-btn active" onclick="setMode('create',this)">✦ Создать</button>
+      <button class="sub-btn" onclick="setMode('fix',this)">⟳ Исправить</button>
+      <button class="sub-btn" onclick="setMode('rework',this)">↺ Переделать</button>
+    </div>
+    <div id="a-create">
+      <textarea id="i-create" placeholder="Что написать? Например: «деловое письмо о переносе встречи»" rows="4" oninput="cc(this,'c1')"></textarea>
+      <div class="char-row"><span class="cc" id="c1">0 симв.</span></div>
+    </div>
+    <div id="a-fix" style="display:none">
+      <textarea id="i-fix" placeholder="Вставьте текст с ошибками..." rows="5" oninput="cc(this,'c2')"></textarea>
+      <div class="char-row"><span class="cc" id="c2">0 симв.</span></div>
+    </div>
+    <div id="a-rework" style="display:none">
+      <textarea id="i-rework" placeholder="Вставьте текст для переработки..." rows="4" oninput="cc(this,'c3')"></textarea>
+      <select id="rw-style" style="margin-top:8px">
+        <option value="formal">Официальный стиль</option>
+        <option value="casual">Разговорный стиль</option>
+        <option value="short">Сократить</option>
+        <option value="expand">Расширить</option>
+        <option value="persuasive">Убедительный стиль</option>
+      </select>
+    </div>
+    <button class="run" onclick="runText()" id="text-btn">Запустить →</button>
+    <div class="loader" id="text-ld"><div class="spin"></div><span>Обрабатываю...</span></div>
+    <div class="out" id="text-oc">
+      <div class="out-bar"><span class="out-lbl">Результат</span><button class="cpy" onclick="cp('text-ot',this)">Копировать</button></div>
+      <div class="out-txt" id="text-ot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 2. ТЕЛЕФОН ══ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-num">2</div>
+    <div>
+      <div class="sec-title">Анализ номера</div>
+      <div class="sec-sub">Страна, оператор, регион и сводка по номеру</div>
+    </div>
+  </div>
+  <div class="sec-body">
+    <input type="tel" id="phone-i" placeholder="+7 (999) 123-45-67" maxlength="25" onkeydown="if(event.key==='Enter')runPhone()">
+    <div class="hints">
+      <button class="hint" onclick="sph('+7 495')">🇷🇺 МСК</button>
+      <button class="hint" onclick="sph('+7 812')">🇷🇺 СПБ</button>
+      <button class="hint" onclick="sph('+7 9')">🇷🇺 Моб.</button>
+      <button class="hint" onclick="sph('+380')">🇺🇦 UA</button>
+      <button class="hint" onclick="sph('+375')">🇧🇾 BY</button>
+      <button class="hint" onclick="sph('+7 7')">🇰🇿 KZ</button>
+      <button class="hint" onclick="sph('+1')">🇺🇸 US</button>
+      <button class="hint" onclick="sph('+44')">🇬🇧 UK</button>
+    </div>
+    <button class="run" onclick="runPhone()" id="phone-btn">Определить →</button>
+    <div class="loader" id="phone-ld"><div class="spin"></div><span>Анализирую...</span></div>
+    <div class="out" id="phone-oc">
+      <div class="out-bar"><span class="out-lbl">Сводка</span><button class="cpy" onclick="cpPhone()">Копировать</button></div>
+      <div class="phone-grid" id="phone-grid"></div>
+      <div class="phone-extra" id="phone-extra"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 3. ИДЕЯ ══ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-num">3</div>
+    <div>
+      <div class="sec-title">Придумать идею</div>
+      <div class="sec-sub">AI сгенерирует готовую идею по вашему направлению</div>
+    </div>
+  </div>
+  <div class="sec-body">
+    <textarea id="i-idea" placeholder="Например: «бизнес в сфере еды для занятых людей» или «приложение для студентов»" rows="4" oninput="cc(this,'c4')"></textarea>
+    <div class="char-row"><span class="cc" id="c4">0 симв.</span></div>
+    <div class="div"></div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Детализация</div>
+    <div class="len-grid">
+      <button class="len-btn" onclick="setLen('short',this)"><span>⚡</span>Кратко</button>
+      <button class="len-btn active" onclick="setLen('medium',this)"><span>📋</span>Средне</button>
+      <button class="len-btn" onclick="setLen('long',this)"><span>📖</span>Подробно</button>
+    </div>
+    <button class="run" onclick="runIdea()" id="idea-btn">Придумать ✦</button>
+    <div class="loader" id="idea-ld"><div class="spin"></div><span>Генерирую идею...</span></div>
+    <div class="out" id="idea-oc">
+      <div class="out-bar"><span class="out-lbl">Идея</span><button class="cpy" onclick="cp('idea-ot',this)">Копировать</button></div>
+      <div class="out-txt" id="idea-ot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4. КОНВЕРТЕР ══ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-num">4</div>
+    <div>
+      <div class="sec-title">Конвертер</div>
+      <div class="sec-sub">Валюты, вес, длина, температура и многое другое</div>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div class="cat-row">
+      <button class="cat-btn active" onclick="setCat('currency',this)">💱 Валюты</button>
+      <button class="cat-btn" onclick="setCat('weight',this)">⚖️ Вес</button>
+      <button class="cat-btn" onclick="setCat('length',this)">📏 Длина</button>
+      <button class="cat-btn" onclick="setCat('temp',this)">🌡 Темп.</button>
+      <button class="cat-btn" onclick="setCat('power',this)">⚡ Мощность</button>
+      <button class="cat-btn" onclick="setCat('area',this)">🔲 Площадь</button>
+      <button class="cat-btn" onclick="setCat('volume',this)">🧪 Объём</button>
+      <button class="cat-btn" onclick="setCat('speed',this)">🚀 Скорость</button>
+      <button class="cat-btn" onclick="setCat('pressure',this)">🔩 Давление</button>
+      <button class="cat-btn" onclick="setCat('data',this)">💾 Данные</button>
+      <button class="cat-btn" onclick="setCat('energy',this)">🔋 Энергия</button>
+    </div>
+    <input type="number" id="conv-val" value="1" step="any" placeholder="Значение" oninput="doConvert()">
+    <div class="conv-grid">
+      <div class="conv-f">
+        <label>Из</label>
+        <select id="from-u" onchange="doConvert()"></select>
+      </div>
+      <button class="swap-btn" onclick="swapU()" title="Поменять">⇄</button>
+      <div class="conv-f">
+        <label>В</label>
+        <select id="to-u" onchange="doConvert()"></select>
+      </div>
+    </div>
+    <div class="res-box">
+      <div class="res-big" id="res-big">—</div>
+      <div class="res-lbl" id="res-lbl">Введите значение</div>
+      <div class="res-rate" id="res-rate"></div>
+    </div>
+    <div class="rate-note" id="rate-note"></div>
+  </div>
+</div>
+
+<!-- ══ 5. АУДИО ══ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-num">5</div>
+    <div>
+      <div class="sec-title">Расшифровка аудио</div>
+      <div class="sec-sub">Речь в текст через Whisper Large V3</div>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div class="drop" id="drop"
+      onclick="document.getElementById('af').click()"
+      ondragover="dov(event)" ondragleave="dol()" ondrop="dof(event)">
+      <span class="drop-icon">🎙</span>
+      <div class="drop-ttl">Нажмите или перетащите файл</div>
+      <div class="drop-sub">Максимум 25 МБ</div>
+      <div class="fmts">
+        <span class="fmt">MP3</span><span class="fmt">WAV</span><span class="fmt">M4A</span>
+        <span class="fmt">OGG</span><span class="fmt">FLAC</span><span class="fmt">WEBM</span><span class="fmt">MP4</span>
+      </div>
+    </div>
+    <input type="file" id="af" accept=".mp3,.wav,.m4a,.ogg,.flac,.webm,.mp4,audio/*,video/mp4,video/webm" style="display:none" onchange="onFile(this)">
+
+    <div class="fprev" id="fprev">
+      <span style="font-size:22px" id="fic">🎵</span>
+      <div class="finfo">
+        <div class="fname" id="fn"></div>
+        <div class="fsize" id="fs"></div>
+      </div>
+      <button class="frm" onclick="rmFile()">✕</button>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:14px;margin-bottom:6px">Язык</div>
+    <div class="lang-row">
+      <button class="lang-btn active" onclick="setLang('ru',this)">🇷🇺 Русский</button>
+      <button class="lang-btn" onclick="setLang('en',this)">🇺🇸 English</button>
+      <button class="lang-btn" onclick="setLang('uk',this)">🇺🇦 Українська</button>
+      <button class="lang-btn" onclick="setLang('de',this)">🇩🇪 Deutsch</button>
+      <button class="lang-btn" onclick="setLang(null,this)">🌐 Авто</button>
+    </div>
+
+    <button class="run" onclick="runAudio()" id="audio-btn" disabled>Расшифровать →</button>
+    <div class="loader" id="audio-ld"><div class="spin"></div><span>Распознаю речь...</span></div>
+    <div class="out" id="audio-oc">
+      <div class="out-bar"><span class="out-lbl">Расшифровка</span><button class="cpy" onclick="cp('audio-ot',this)">Копировать</button></div>
+      <div class="out-txt" id="audio-ot"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────
+const GKEY  = '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';
+const GCHAT = 'https://api.groq.com/openai/v1/chat/completions';
+const GWAV  = 'https://api.groq.com/openai/v1/audio/transcriptions';
+const MDL   = 'llama-3.3-70b-versatile';
+
+let tMode = 'create', iLen = 'medium', afFile = null, afLang = 'ru';
+
+// ─────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────
+function cc(el,id){ document.getElementById(id).textContent = el.value.length + ' симв.' }
+function sph(p){ const el=document.getElementById('phone-i'); el.value=p+' '; el.focus() }
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),3500);
+}
+
+function showOut(id){ document.getElementById(id).classList.add('on') }
+function hideOut(id){ document.getElementById(id).classList.remove('on') }
+
+function ld(sec, on){
+  const b=document.getElementById(sec+'-btn'), l=document.getElementById(sec+'-ld');
+  if(b) b.disabled=on;
+  if(l) l.classList.toggle('on',on);
+}
+
+function cp(id,btn){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    const o=btn.textContent; btn.textContent='✓ Скопировано';
+    setTimeout(()=>btn.textContent=o,2000);
+  });
+}
+
+// ─────────────────────────────────────
+// GROQ CHAT
+// ─────────────────────────────────────
+async function chat(sys, usr){
+  const r = await fetch(GCHAT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GKEY},
+    body: JSON.stringify({
+      model: MDL, max_tokens:1500, temperature:0.7,
+      messages:[{role:'system',content:sys},{role:'user',content:usr}]
+    })
+  });
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error?.message || 'Groq error '+r.status);
+  return d.choices[0].message.content;
+}
+
+// ─────────────────────────────────────
+// 1. TEXT
+// ─────────────────────────────────────
+function setMode(m,btn){
+  tMode=m;
+  ['create','fix','rework'].forEach(x=>document.getElementById('a-'+x).style.display=x===m?'block':'none');
+  document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  hideOut('text-oc');
+}
+
+async function runText(){
+  let sys,usr;
+  if(tMode==='create'){
+    const v=document.getElementById('i-create').value.trim();
+    if(!v){toast('Введите задание');return}
+    sys='Ты профессиональный копирайтер. Пишешь чётко, без воды. Отвечай только на русском языке.';
+    usr='Напиши текст: '+v;
+  } else if(tMode==='fix'){
+    const v=document.getElementById('i-fix').value.trim();
+    if(!v){toast('Вставьте текст');return}
+    sys='Ты редактор. Исправляй ошибки (орфография, пунктуация, стиль). Возвращай ТОЛЬКО исправленный текст.';
+    usr=v;
+  } else {
+    const v=document.getElementById('i-rework').value.trim();
+    if(!v){toast('Вставьте текст');return}
+    const sm={formal:'официальный деловой',casual:'разговорный живой',short:'максимально краткий (сократи вдвое)',expand:'развёрнутый подробный',persuasive:'убедительный продающий'};
+    sys='Ты рерайтер. Возвращай ТОЛЬКО переработанный текст.';
+    usr='Перепиши в '+sm[document.getElementById('rw-style').value]+' стиле:\n\n'+v;
+  }
+  ld('text',true); hideOut('text-oc');
+  try{
+    const t=await chat(sys,usr);
+    document.getElementById('text-ot').textContent=t;
+    showOut('text-oc');
+  }catch(e){toast('Ошибка: '+e.message)}
+  finally{ld('text',false)}
+}
+
+// ─────────────────────────────────────
+// 2. PHONE
+// ─────────────────────────────────────
+async function runPhone(){
+  const v=document.getElementById('phone-i').value.trim();
+  if(!v||v.length<4){toast('Введите номер');return}
+  const sys='Ты эксперт по телекоммуникациям. Анализируй номера телефонов. Возвращай ТОЛЬКО валидный JSON без markdown.\nСтруктура: {"country":"Страна+флаг","operator":"Оператор","region":"Регион/Город","type":"Тип номера","format":"Международный формат","prefix_info":"Инфо о диапазоне","risk":"low|medium|high","risk_reason":"Причина","extra":"2-3 доп. факта"}';
+  ld('phone',true); hideOut('phone-oc');
+  try{
+    const raw=await chat(sys,'Номер: '+v);
+    let d={};
+    try{ d=JSON.parse(raw.replace(/```[\w]*\n?/g,'').trim()) }catch{ d={extra:raw} }
+    renderPhone(d,v);
+  }catch(e){toast('Ошибка: '+e.message)}
+  finally{ld('phone',false)}
+}
+
+function renderPhone(d,raw){
+  const rc={low:'r-low',medium:'r-mid',high:'r-hi'};
+  const rl={low:'🟢 Низкий риск',medium:'🟡 Средний риск',high:'🔴 Высокий риск'};
+  document.getElementById('phone-grid').innerHTML=`
+    <div class="tile"><div class="tile-lbl">Страна</div><div class="tile-val">${d.country||'—'}</div></div>
+    <div class="tile"><div class="tile-lbl">Оператор</div><div class="tile-val">${d.operator||'—'}</div></div>
+    <div class="tile"><div class="tile-lbl">Регион / Город</div><div class="tile-val">${d.region||'—'}</div></div>
+    <div class="tile"><div class="tile-lbl">Тип номера</div><div class="tile-val">${d.type||'—'}</div></div>
+    <div class="tile wide"><div class="tile-lbl">Формат</div><div class="tile-val">${d.format||raw}</div><div class="tile-sub">${d.prefix_info||''}</div></div>
+    <div class="tile wide"><div class="tile-lbl">Уровень риска</div><div class="tile-val" style="margin-top:3px"><span class="rbadge ${rc[d.risk]||'r-low'}">${rl[d.risk]||'—'}</span></div><div class="tile-sub" style="margin-top:6px">${d.risk_reason||''}</div></div>`;
+  document.getElementById('phone-extra').innerHTML=d.extra?`<strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)">Дополнительно</strong><br><br>${d.extra}`:'';
+  showOut('phone-oc');
+}
+function cpPhone(){
+  const t=document.getElementById('phone-grid').innerText+'\n\n'+document.getElementById('phone-extra').innerText;
+  navigator.clipboard.writeText(t).then(()=>toast('Скопировано'));
+}
+
+// ─────────────────────────────────────
+// 3. IDEA
+// ─────────────────────────────────────
+function setLen(l,btn){ iLen=l; document.querySelectorAll('.len-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active') }
+
+async function runIdea(){
+  const v=document.getElementById('i-idea').value.trim();
+  if(!v){toast('Опишите направление');return}
+  const lm={short:'Кратко: название + суть одной строкой + 2-3 строки почему круто. До 80 слов.',medium:'Структурированно: название, суть (2-3 предл.), аудитория, монетизация, главное преимущество. 150-250 слов.',long:'Полное описание: название, концепция, аудитория, бизнес-модель, конкуренты, первые шаги, риски. 300-500 слов.'};
+  const sys='Ты опытный предприниматель и бизнес-ментор. Генерируешь нестандартные жизнеспособные идеи. Только русский язык.';
+  ld('idea',true); hideOut('idea-oc');
+  try{
+    const t=await chat(sys,'Придумай идею: "'+v+'"\n\n'+lm[iLen]);
+    document.getElementById('idea-ot').textContent=t;
+    showOut('idea-oc');
+  }catch(e){toast('Ошибка: '+e.message)}
+  finally{ld('idea',false)}
+}
+
+// ─────────────────────────────────────
+// 4. CONVERTER
+// ─────────────────────────────────────
+const UNITS={
+  currency:{label:'Валюта',units:{
+    USD:'🇺🇸 Доллар (USD)',EUR:'🇪🇺 Евро (EUR)',RUB:'🇷🇺 Рубль (RUB)',
+    GBP:'🇬🇧 Фунт (GBP)',CNY:'🇨🇳 Юань (CNY)',JPY:'🇯🇵 Йена (JPY)',
+    KZT:'🇰🇿 Тенге (KZT)',BYN:'🇧🇾 Бел. рубль (BYN)',UAH:'🇺🇦 Гривна (UAH)',
+    AED:'🇦🇪 Дирхам (AED)',TRY:'🇹🇷 Лира (TRY)',INR:'🇮🇳 Рупия (INR)',
+    CHF:'🇨🇭 Франк (CHF)',CAD:'🇨🇦 Кан. доллар (CAD)',AUD:'🇦🇺 Авс. доллар (AUD)',
+    SEK:'🇸🇪 Крона (SEK)',NOK:'🇳🇴 Нор. крона (NOK)',PLN:'🇵🇱 Злотый (PLN)',
+    CZK:'🇨🇿 Чеш. крона (CZK)',KGS:'🇰🇬 Сом (KGS)',AMD:'🇦🇲 Драм (AMD)',
+    GEL:'🇬🇪 Лари (GEL)',AZN:'🇦🇿 Манат (AZN)',UZS:'🇺🇿 Сум (UZS)',
+    BRL:'🇧🇷 Реал (BRL)',SGD:'🇸🇬 Синг. доллар (SGD)',HKD:'🇭🇰 Гонк. доллар (HKD)',
+    KRW:'🇰🇷 Вона (KRW)',MXN:'🇲🇽 Песо (MXN)',ZAR:'🇿🇦 Рэнд (ZAR)'
+  }},
+  weight:{label:'Вес',base:'kg',units:{
+    kg:{l:'Килограмм (kg)',f:1},g:{l:'Грамм (g)',f:0.001},mg:{l:'Миллиграмм (mg)',f:1e-6},
+    t:{l:'Тонна (t)',f:1000},lb:{l:'Фунт (lb)',f:0.453592},oz:{l:'Унция (oz)',f:0.0283495},
+    st:{l:'Стоун (st)',f:6.35029},ct:{l:'Карат (ct)',f:0.0002},cwt:{l:'Центнер (cwt)',f:100}
+  }},
+  length:{label:'Длина',base:'m',units:{
+    m:{l:'Метр (m)',f:1},km:{l:'Километр (km)',f:1000},cm:{l:'Сантиметр (cm)',f:0.01},
+    mm:{l:'Миллиметр (mm)',f:0.001},mi:{l:'Миля (mi)',f:1609.34},yd:{l:'Ярд (yd)',f:0.9144},
+    ft:{l:'Фут (ft)',f:0.3048},in:{l:'Дюйм (in)',f:0.0254},nmi:{l:'Морская миля (nmi)',f:1852},
+    ly:{l:'Световой год (ly)',f:9.461e15},au:{l:'Астр. ед. (au)',f:1.496e11}
+  }},
+  temp:{label:'Температура',units:{C:{l:'Цельсий (°C)'},F:{l:'Фаренгейт (°F)'},K:{l:'Кельвин (K)'},R:{l:'Ранкин (°R)'}}},
+  power:{label:'Мощность',base:'W',units:{
+    W:{l:'Ватт (W)',f:1},kW:{l:'Киловатт (kW)',f:1000},MW:{l:'Мегаватт (MW)',f:1e6},
+    hp:{l:'Лош. сила (hp)',f:745.7},PS:{l:'Метр. л.с. (PS)',f:735.499},BTUh:{l:'BTU/ч',f:0.293071}
+  }},
+  area:{label:'Площадь',base:'m2',units:{
+    m2:{l:'Кв. метр (m²)',f:1},km2:{l:'Кв. км (km²)',f:1e6},cm2:{l:'Кв. см (cm²)',f:0.0001},
+    ha:{l:'Гектар (ha)',f:10000},ar:{l:'Сотка (ar)',f:100},ft2:{l:'Кв. фут (ft²)',f:0.092903},
+    mi2:{l:'Кв. миля (mi²)',f:2.59e6},ac:{l:'Акр (ac)',f:4046.86}
+  }},
+  volume:{label:'Объём',base:'l',units:{
+    l:{l:'Литр (l)',f:1},ml:{l:'Миллилитр (ml)',f:0.001},m3:{l:'Куб. метр (m³)',f:1000},
+    gal:{l:'Галлон US (gal)',f:3.78541},pt:{l:'Пинта (pt)',f:0.473176},
+    fl_oz:{l:'Жидк. унция (fl oz)',f:0.0296},cup:{l:'Чашка (cup)',f:0.2366},
+    tsp:{l:'Ч. ложка (tsp)',f:0.00493},tbsp:{l:'Ст. ложка (tbsp)',f:0.01479},
+    bbl:{l:'Баррель (bbl)',f:158.987}
+  }},
+  speed:{label:'Скорость',base:'ms',units:{
+    ms:{l:'м/с',f:1},kmh:{l:'км/ч',f:0.277778},mph:{l:'миль/ч',f:0.44704},
+    kn:{l:'Узел (kn)',f:0.514444},mach:{l:'Мах',f:340.29},fts:{l:'фут/с',f:0.3048}
+  }},
+  pressure:{label:'Давление',base:'pa',units:{
+    pa:{l:'Паскаль (Pa)',f:1},kpa:{l:'кПа (kPa)',f:1000},mpa:{l:'МПа (MPa)',f:1e6},
+    bar:{l:'Бар (bar)',f:1e5},atm:{l:'Атмосфера (atm)',f:101325},
+    mmhg:{l:'мм рт.ст.',f:133.322},psi:{l:'PSI',f:6894.76}
+  }},
+  data:{label:'Данные',base:'byte',units:{
+    bit:{l:'Бит (bit)',f:0.125},byte:{l:'Байт (B)',f:1},kb:{l:'Килобайт (KB)',f:1024},
+    mb:{l:'Мегабайт (MB)',f:1048576},gb:{l:'Гигабайт (GB)',f:1073741824},
+    tb:{l:'Терабайт (TB)',f:1.0995e12},pb:{l:'Петабайт (PB)',f:1.1259e15}
+  }},
+  energy:{label:'Энергия',base:'j',units:{
+    j:{l:'Джоуль (J)',f:1},kj:{l:'кДж (kJ)',f:1000},mj:{l:'МДж (MJ)',f:1e6},
+    cal:{l:'Калория (cal)',f:4.184},kcal:{l:'Килокалория (kcal)',f:4184},
+    wh:{l:'Ватт-час (Wh)',f:3600},kwh:{l:'кВт-час (kWh)',f:3.6e6},btu:{l:'BTU',f:1055.06}
+  }}
+};
+
+let curCat='currency';
+let rateCache={data:null,ts:0};
+
+function setCat(cat,btn){
+  curCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  fillUnits(); doConvert();
+}
+
+function fillUnits(){
+  const cat=UNITS[curCat];
+  const fu=document.getElementById('from-u'), tu=document.getElementById('to-u');
+  fu.innerHTML=''; tu.innerHTML='';
+  Object.entries(cat.units).forEach(([k,v],i)=>{
+    const lbl=cat.label==='Валюта'?v:(v.l||v);
+    fu.innerHTML+=`<option value="${k}">${lbl}</option>`;
+    tu.innerHTML+=`<option value="${k}">${lbl}</option>`;
+  });
+  const keys=Object.keys(cat.units);
+  if(keys.length>1) tu.value=keys[1];
+}
+
+function swapU(){
+  const f=document.getElementById('from-u'),t=document.getElementById('to-u');
+  [f.value,t.value]=[t.value,f.value]; doConvert();
+}
+
+async function doConvert(){
+  const val=parseFloat(document.getElementById('conv-val').value);
+  const from=document.getElementById('from-u').value;
+  const to=document.getElementById('to-u').value;
+  if(isNaN(val)||!from||!to){setRes('—','Введите значение','');return}
+  if(from===to){setRes(fmt(val),from,'1 : 1');return}
+  if(curCat==='currency') await convCurrency(val,from,to);
+  else if(curCat==='temp') convTemp(val,from,to);
+  else convPhys(val,from,to);
+}
+
+function convPhys(val,from,to){
+  const u=UNITS[curCat].units;
+  const res=(val*u[from].f)/u[to].f;
+  const rate=u[from].f/u[to].f;
+  setRes(fmt(res),`${fmt(val)} ${from} = ${fmt(res)} ${to}`,`1 ${from} = ${fmt(rate)} ${to}`);
+}
+
+function convTemp(val,from,to){
+  let c;
+  if(from==='C') c=val;
+  else if(from==='F') c=(val-32)*5/9;
+  else if(from==='K') c=val-273.15;
+  else if(from==='R') c=(val-491.67)*5/9;
+  let res;
+  if(to==='C') res=c;
+  else if(to==='F') res=c*9/5+32;
+  else if(to==='K') res=c+273.15;
+  else if(to==='R') res=(c+273.15)*9/5;
+  setRes(fmt(res),`${fmt(val)}°${from} = ${fmt(res)}°${to}`,'');
+  document.getElementById('rate-note').textContent='';
+}
+
+// Валюты — используем exchangerate.host (CORS открытый, без ключа)
+async function convCurrency(val,from,to){
+  document.getElementById('rate-note').textContent='Загружаю курс...';
+  try{
+    const now=Date.now();
+    if(!rateCache.data||now-rateCache.ts>3600000){
+      // exchangerate.host — полностью открытый CORS, без ключа
+      const r=await fetch('https://open.er-api.com/v6/latest/USD',{mode:'cors'});
+      if(!r.ok) throw new Error(`Сервис курсов недоступен (${r.status})`);
+      const json=await r.json();
+      if(json.result==='error') throw new Error(json['error-type']||'API error');
+      rateCache.data=json; rateCache.ts=now;
+    }
+    const rates=rateCache.data.rates;
+    if(!rates[from]) throw new Error(`Валюта ${from} не поддерживается`);
+    if(!rates[to]) throw new Error(`Валюта ${to} не поддерживается`);
+    const res=(val/rates[from])*rates[to];
+    const rate=rates[to]/rates[from];
+    document.getElementById('rate-note').textContent=`Курс на ${rateCache.data.time_last_update_utc?.slice(0,16)||'сегодня'} · open.er-api.com`;
+    setRes(fmt(res),`${fmt(val)} ${from} = ${fmt(res)} ${to}`,`1 ${from} = ${fmt(rate)} ${to}`);
+  }catch(e){
+    document.getElementById('rate-note').textContent='';
+    setRes('⚠️',e.message,'');
+  }
+}
+
+function setRes(big,lbl,rate){
+  document.getElementById('res-big').textContent=big;
+  document.getElementById('res-lbl').textContent=lbl;
+  document.getElementById('res-rate').textContent=rate;
+}
+
+function fmt(n){
+  if(!isFinite(n)) return '∞';
+  if(Math.abs(n)>=1e12) return (n/1e12).toFixed(3)+' T';
+  if(Math.abs(n)>=1e9)  return (n/1e9).toFixed(3)+' B';
+  if(Math.abs(n)>=1e6)  return (n/1e6).toFixed(3)+' M';
+  if(Math.abs(n)<0.00001&&n!==0) return n.toExponential(4);
+  return parseFloat(n.toFixed(4)).toLocaleString('ru-RU',{maximumFractionDigits:4});
+}
+
+// ─────────────────────────────────────
+// 5. AUDIO
+// ─────────────────────────────────────
+// Groq Whisper поддерживает: flac, mp3, mp4, mpeg, mpga, m4a, ogg, opus, wav, webm
+const EXT_OK=['mp3','wav','m4a','ogg','flac','webm','mp4','mpeg','mpga','opus'];
+// Правильные MIME для каждого расширения
+const EXT_MIME={
+  mp3:'audio/mpeg', wav:'audio/wav', m4a:'audio/mp4', ogg:'audio/ogg',
+  flac:'audio/flac', webm:'audio/webm', mp4:'audio/mp4',
+  mpeg:'audio/mpeg', mpga:'audio/mpeg', opus:'audio/ogg'
+};
+
+function setLang(l,btn){ afLang=l; document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active') }
+function dov(e){ e.preventDefault(); document.getElementById('drop').classList.add('drag') }
+function dol(){ document.getElementById('drop').classList.remove('drag') }
+function dof(e){ e.preventDefault(); dol(); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]) }
+function onFile(inp){ if(inp.files[0]) handleFile(inp.files[0]) }
+
+function handleFile(f){
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(!EXT_OK.includes(ext)){ toast('Формат не поддерживается'); return }
+  if(f.size>25*1024*1024){ toast('Файл слишком большой (макс. 25 МБ)'); return }
+  afFile=f;
+  const icons={mp3:'🎵',wav:'🎼',m4a:'🎵',ogg:'🔊',flac:'💿',webm:'📹',mp4:'📹'};
+  document.getElementById('fic').textContent=icons[ext]||'🎙';
+  document.getElementById('fn').textContent=f.name;
+  document.getElementById('fs').textContent=fmtSize(f.size);
+  document.getElementById('fprev').classList.add('on');
+  document.getElementById('audio-btn').disabled=false;
+  hideOut('audio-oc');
+}
+
+function rmFile(){
+  afFile=null;
+  document.getElementById('fprev').classList.remove('on');
+  document.getElementById('audio-btn').disabled=true;
+  document.getElementById('af').value='';
+}
+
+function fmtSize(b){
+  if(b<1024) return b+' B';
+  if(b<1048576) return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(1)+' MB';
+}
+
+async function runAudio(){
+  if(!afFile){ toast('Выберите файл'); return }
+  ld('audio',true); hideOut('audio-oc');
+  try{
+    const ext=afFile.name.split('.').pop().toLowerCase();
+    const mime=EXT_MIME[ext]||'audio/mpeg';
+
+    // Пересоздаём Blob с правильным MIME — это ключевое исправление
+    const buf=await afFile.arrayBuffer();
+    const blob=new Blob([buf],{type:mime});
+
+    const fd=new FormData();
+    // Имя файла должно содержать расширение — Groq определяет формат по нему
+    fd.append('file', blob, 'audio.'+ext);
+    fd.append('model','whisper-large-v3');
+    fd.append('response_format','json');
+    // Язык передаём только если не авто
+    if(afLang) fd.append('language', afLang);
+
+    const r=await fetch(GWAV,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+GKEY},
+      body:fd
+    });
+
+    let data;
+    try{ data=await r.json() }
+    catch{ throw new Error('Сервер вернул не JSON') }
+
+    if(!r.ok){
+      // Красивое сообщение об ошибке
+      const msg=data?.error?.message||data?.error||JSON.stringify(data);
+      throw new Error(typeof msg==='string'?msg.slice(0,200):JSON.stringify(msg).slice(0,200));
+    }
+
+    const text=(data.text||'').trim();
+    if(!text){
+      document.getElementById('audio-ot').textContent='⚠️ Речь не обнаружена. Убедитесь что в аудио есть голос.';
+    } else {
+      const words=text.split(/\s+/).filter(Boolean).length;
+      document.getElementById('audio-ot').textContent=text+'\n\n───\n📝 Слов: ~'+words;
+    }
+    showOut('audio-oc');
+  }catch(e){
+    toast('Ошибка: '+e.message);
+  }finally{
+    ld('audio',false);
+  }
+}
+
+// ─────────────────────────────────────
+// INIT
+// ─────────────────────────────────────
+fillUnits();
+doConvert();
+</script>
+</body>
+</html>
